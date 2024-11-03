@@ -42,14 +42,6 @@ def threaded_client(conn, p, gameId):
                         game.next_turn()
                         print('turn: ', game.turn)
                         conn.sendall(pickle.dumps(game))
-                    elif data.startswith('update_chars'):
-                        try:
-                            cmd, name, x, y = data.split(',')
-                            game.update_chars(name, x, y)
-                            print(f"Updated {name}: {x}, {y}")
-                            conn.sendall(pickle.dumps(game))
-                        except Exception as e:
-                            print(f"Error processing update command: {e}")
                     else:
                         conn.sendall(pickle.dumps(game))
                 else:
@@ -60,19 +52,26 @@ def threaded_client(conn, p, gameId):
                     if gameId in games:
                         game = games[gameId]
                         data = pickle.loads(raw_data)
-                        game.update_chars(data.name, data.x, data.y, data.selected)
+
+                        if data['msg'] == 'init_regions':
+                            game.init_regions(data['regions'], data['side'])
+                        elif data['msg'] == 'char_update':
+                            char = data['char']
+                            game.update_chars(char)
+                        elif data['msg'] == 'reg_update':
+                            reg = data['reg']
+                            game.update_regions(reg, data['side'])
                         conn.sendall(pickle.dumps(game))
 
                 except pickle.UnpicklingError:
                     print("Failed to unpickle data: data might be corrupted or not a valid pickled object.")
                 except AttributeError as e:
                     print(f"Attribute error: {e}. Make sure the object has the correct attributes.")
-                except Exception as e:
-                    print("Failed to unpickle data:", e)
+
             except Exception as e:
                 print('no raw data', e)
-        except:
-            print('different ')
+        except Exception as e:
+            print(e)
 
     print("Lost connection")
     try:

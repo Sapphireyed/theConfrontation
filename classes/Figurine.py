@@ -12,15 +12,16 @@ class Figurine:
         self.side = side
         self.strength = strength
         self.selected = False
+        self.region = None
 
     def change_position(self, position):
         self.x, self.y = position
 
-    def draw(self, win, position):
+    def draw(self, win, position, side):
         self.x = position[0]
         self.y = position[1]
         pygame.draw.rect(win, (170, 170, 255), (self.x, self.y, self.width, self.height))
-        border = (0, 0, 0) if not self.selected else (0, 255, 0)
+        border = (0, 255, 0) if self.selected else (0, 0, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
         font = pygame.font.SysFont("cosmicsans", 40)
         text = font.render(self.name + '  ' + str(self.strength), 1, (0, 0, 0))
@@ -28,7 +29,6 @@ class Figurine:
                          self.y + round(self.height / 2) - round(text.get_height() / 2)))
 
     def clicked(self, pos):
-        print(self.x)
         mouseX = pos[0]
         mouseY = pos[1]
         if self.x <= mouseX <= (self.x + self.width) and self.y <= mouseY <= (self.y + self.height):
