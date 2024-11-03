@@ -1,6 +1,9 @@
 import socket
 from _thread import *
 import pickle
+
+from pygame.display import update
+
 from game import Game
 
 server = "192.168.0.192"
@@ -27,31 +30,49 @@ def threaded_client(conn, p, gameId):
 
     while True:
         try:
-            data = conn.recv(4096).decode()
-            if gameId in games:
-                game = games[gameId]
+            raw_data = conn.recv(4096)
+            try:
+                data = raw_data.decode()
+                if gameId in games:
+                    game = games[gameId]
 
-                if not data:
-                    break
-                elif data == 'next_turn':
-                    game.next_turn()
-                    print('turn: ', game.turn)
-                    conn.sendall(pickle.dumps(game))
-                elif data.startswith('update'):
-                    try:
-                        type, command, name, val = data.split(',')
-                        print('command', command, name, val)
-                        if command == 'RSELECTED':
-                            game.update_regions_state(name, val)
-                            print(f"Updated {name} selection state to {val}")
-                    except Exception as e:
-                        print(f"Error processing update command: {e}")
+                    if not data:
+                        break
+                    elif data == 'next_turn':
+                        game.next_turn()
+                        print('turn: ', game.turn)
+                        conn.sendall(pickle.dumps(game))
+                    elif data.startswith('update_chars'):
+                        try:
+                            cmd, name, x, y = data.split(',')
+                            game.update_chars(name, x, y)
+                            print(f"Updated {name}: {x}, {y}")
+                            conn.sendall(pickle.dumps(game))
+                        except Exception as e:
+                            print(f"Error processing update command: {e}")
+                    else:
+                        conn.sendall(pickle.dumps(game))
                 else:
-                    conn.sendall(pickle.dumps(game))
-            else:
-                break
+                    break
+            # if data comes as object or smth else not string
+            except UnicodeDecodeError:
+                try:
+                    if gameId in games:
+                        game = games[gameId]
+                        data = pickle.loads(raw_data)
+                        game.update_chars(data.name, data.x, data.y, data.selected)
+                        conn.sendall(pickle.dumps(game))
+
+                except pickle.UnpicklingError:
+                    print("Failed to unpickle data: data might be corrupted or not a valid pickled object.")
+                except AttributeError as e:
+                    print(f"Attribute error: {e}. Make sure the object has the correct attributes.")
+                except Exception as e:
+                    print("Failed to unpickle data:", e)
+            except Exception as e:
+                print('no raw data', e)
         except:
-            break
+            print('different ')
 
     print("Lost connection")
     try:

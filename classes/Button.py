@@ -9,7 +9,7 @@ class Button:
         self.height = 50
         self.id = "main_button"
         self.x = 725
-        self.y = 450 - self.height/2
+        self.y = 800
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))

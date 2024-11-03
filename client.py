@@ -1,10 +1,11 @@
+import pickle
 import pygame
 from classes.Board import Board
 from network import Network
-from classes.Figurine import Figurine
 from classes.Region import Region
 from utils.regionsData import get_regions
 from classes.Button import Button
+import utils.utils as utils
 
 pygame.init()
 
@@ -16,25 +17,26 @@ pygame.display.set_caption("The Confrontation")
 start = Button('Start game', (200, 200, 250))
 
 
-def redrawWindow(win, game, player, regions):
+def redrawWindow(win, game, regions, n, side):
     win.fill((0, 168, 168))
 
     if not(game.connected()):
-        font = pygame.font.SysFont("comicsans", 80)
-        text = font.render("Waiting for Player...", 1, (255,0,0), True)
-        win.blit(text, (width/2 - text.get_width()/2, height/2 - text.get_height()/2))
+        utils.waitForPlayer(win, width, height)
     else:
-        board = Board()
-        board.draw(win)
-
-        for r in regions:
-            if r.name in game.regions_state:
-                r.selected = game.regions_state[r.name]['selected']
-            r.draw(win)
+        utils.drawBoard(win, Board, regions, game)
 
         if game.turn == 0:
-            f1 = Figurine('frodo', '', (750, 50))
-            f1.draw(win)
+            y = 10
+            for f, char in game.chars.items():
+                if char.side == side:
+                    if char.x == 0 and char.y == 0:
+                        char.x = 750
+                        char.y = y
+                        n.send(char)
+                    print(char.x)
+                    char.draw(win, (char.x, char.y))
+                    y += 80
+
             start.draw(win)
         else:
             start.text = 'end turn'
@@ -54,11 +56,13 @@ def main():
         try:
             game = n.send("get")
         except Exception as e:
-            run = False
+            running = False
             print("Couldn't get game", e)
             break
 
-        regions_data = get_regions(game.players[player]['side'])
+        side = game.players[player]['side']
+
+        regions_data = get_regions(side)
         regions = [Region(region_info['name'], '', False, player, region_info['position']) for region_name, region_info
                    in regions_data.items()]
 
@@ -73,6 +77,12 @@ def main():
                 if start.click(pos):
                     n.send('next_turn')
 
+                for f, char in game.chars.items():
+                    char.selected = False
+                    if char.clicked(pos):
+                        char.selected = True
+                    n.send(char)
+
                 for r in regions:
                     r.selected = False
                     #n.send(f'update,RSELECTED,{r.name},false')
@@ -80,6 +90,6 @@ def main():
                         r.selected = True
                         #n.send(f'update,RSELECTED,{r.name},true')
 
-        redrawWindow(win, game, player, regions)
+        redrawWindow(win, game, regions, n, side)
 
 main()

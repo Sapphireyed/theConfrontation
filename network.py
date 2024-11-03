@@ -24,14 +24,17 @@ class Network:
 
     def send(self, data):
         try:
-            self.client.send(str.encode(data))
-            #print("network data sent: ", data)
+            if isinstance(data, str):
+                self.client.send(str.encode(data))
+            else:
+                self.client.send(pickle.dumps(data))
+
             response = self.client.recv(4096)
             decoded_response = pickle.loads(response)
-            #print(f"Network received response: {decoded_response.regions_state}")  # Debug log
             return decoded_response
-
-        except socket.error as e:
+        except TypeError as e:
             print("error in sending in network.py: ", e)
+        except socket.error as e:
+            print("error in sending in network.py, socket error: ", e)
         except Exception as e:
-            print('error in send', e)
+            print('error in send', Exception)
