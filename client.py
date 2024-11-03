@@ -17,13 +17,14 @@ pygame.display.set_caption("The Confrontation")
 start = Button('Start game', (200, 200, 250))
 
 
-def redrawWindow(win, game, regions, n, side):
+def redrawWindow(win, game, n, side):
     win.fill((0, 168, 168))
+    regions = game.regions[side]
 
     if not(game.connected()):
         utils.waitForPlayer(win, width, height)
     else:
-        utils.drawBoard(win, Board, regions, game)
+        utils.drawBoard(win, Board, regions, n, side)
 
         if game.turn == 0:
             y = 10
@@ -32,9 +33,8 @@ def redrawWindow(win, game, regions, n, side):
                     if char.x == 0 and char.y == 0:
                         char.x = 750
                         char.y = y
-                        n.send(char)
-                    print(char.x)
-                    char.draw(win, (char.x, char.y))
+                        n.send({'msg': 'char_update', 'char': char})
+                    char.draw(win, (char.x, char.y), side)
                     y += 80
 
             start.draw(win)
@@ -63,8 +63,10 @@ def main():
         side = game.players[player]['side']
 
         regions_data = get_regions(side)
-        regions = [Region(region_info['name'], '', False, player, region_info['position']) for region_name, region_info
+        regions = [Region(region_info['name'], '', player, region_info['position']) for region_name, region_info
                    in regions_data.items()]
+
+        n.send({'msg': 'init_regions', 'regions': regions, 'side': side})
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,23 +75,31 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
+                char_selected = next(filter(lambda char: char[1].selected, game.chars.items()), None)
+                side_chars = filter(lambda char: char[1].side == side, game.chars.items())
 
                 if start.click(pos):
                     n.send('next_turn')
 
-                for f, char in game.chars.items():
+                for f, char in side_chars:
                     char.selected = False
                     if char.clicked(pos):
                         char.selected = True
-                    n.send(char)
+                    n.send({'msg': 'char_update', 'char': char})
 
                 for r in regions:
                     r.selected = False
-                    #n.send(f'update,RSELECTED,{r.name},false')
+
                     if r.clicked(pos):
                         r.selected = True
-                        #n.send(f'update,RSELECTED,{r.name},true')
+                        if char_selected:
+                            char_selected[1].x = r.x + r.width/2 - char_selected[1].width/2
+                            char_selected[1].y = r.y + r.height/2 - char_selected[1].height/2
+                            char_selected[1].region = r.name
+                            n.send({'msg': 'char_update', 'char': char_selected[1]})
 
-        redrawWindow(win, game, regions, n, side)
+                        n.send({'msg': 'reg_update', 'reg': r, 'side': side})
+
+        redrawWindow(win, game, n, side)
 
 main()
