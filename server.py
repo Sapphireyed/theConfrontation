@@ -33,6 +33,10 @@ def threaded_client(conn, p, gameId):
 
                 if not data:
                     break
+                elif data == 'next_turn':
+                    game.next_turn()
+                    print('turn: ', game.turn)
+                    conn.sendall(pickle.dumps(game))
                 elif data.startswith('update'):
                     try:
                         type, command, name, val = data.split(',')

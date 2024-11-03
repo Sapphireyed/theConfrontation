@@ -4,6 +4,7 @@ from network import Network
 from classes.Figurine import Figurine
 from classes.Region import Region
 from utils.regionsData import get_regions
+from classes.Button import Button
 
 pygame.init()
 
@@ -11,6 +12,8 @@ width = 900
 height = 900
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("The Confrontation")
+
+start = Button('Start game', (200, 200, 250))
 
 
 def redrawWindow(win, game, player, regions):
@@ -32,6 +35,10 @@ def redrawWindow(win, game, player, regions):
         if game.turn == 0:
             f1 = Figurine('frodo', '', (750, 50))
             f1.draw(win)
+            start.draw(win)
+        else:
+            start.text = 'end turn'
+            start.draw(win)
 
     pygame.display.update()
 
@@ -41,8 +48,6 @@ def main():
     n = Network()
     player = int(n.get_p())
     print("You are player", player)
-    regions_data = get_regions(player)
-    regions = [Region(region_info['name'], '', False, player, region_info['position']) for region_name, region_info in regions_data.items()]
 
     while running:
         clock.tick(60)
@@ -53,6 +58,10 @@ def main():
             print("Couldn't get game", e)
             break
 
+        regions_data = get_regions(game.players[player]['side'])
+        regions = [Region(region_info['name'], '', False, player, region_info['position']) for region_name, region_info
+                   in regions_data.items()]
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -60,6 +69,10 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
+
+                if start.click(pos):
+                    n.send('next_turn')
+
                 for r in regions:
                     r.selected = False
                     #n.send(f'update,RSELECTED,{r.name},false')
