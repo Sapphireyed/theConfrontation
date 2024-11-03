@@ -35,6 +35,36 @@ class Region:
         elif self.position == 6:
             self.x = 700 / 2 + self.width / 2
             self.y = 600
+        elif self.position == 7:
+            self.x = 700 / 2 - self.width * 2
+            self.y = 500
+        elif self.position == 8:
+            self.x = 700 / 2 - self.width
+            self.y = 500
+        elif self.position == 9:
+            self.x = 700 / 2
+            self.y = 500
+        elif self.position == 10:
+            self.x = 700 / 2 + self.width
+            self.y = 500
+        elif self.position == 16:
+            self.x = 700 / 2 - self.width / 2
+            self.y = 200
+        elif self.position == 15:
+            self.x = 700 / 2 - self.width
+            self.y = 300
+        elif self.position == 14:
+            self.x = 700 / 2
+            self.y = 300
+        elif self.position == 13:
+            self.x = 700 / 2 - self.width * 1.5
+            self.y = 400
+        elif self.position == 12:
+            self.x = 700 / 2 - self.width / 2
+            self.y = 400
+        elif self.position == 11:
+            self.x = 700 / 2 + self.width / 2
+            self.y = 400
         else:
             self.x = 0
             self.y = 0

@@ -87,7 +87,7 @@ def main():
                         char.selected = True
                     n.send({'msg': 'char_update', 'char': char})
 
-                for r in regions:
+                for r in game.regions[side]:
                     r.selected = False
 
                     if r.clicked(pos):
