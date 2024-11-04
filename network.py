@@ -29,7 +29,7 @@ class Network:
             else:
                 self.client.send(pickle.dumps(data))
 
-            response = self.client.recv(4096)
+            response = self.client.recv(4096*2)
             decoded_response = pickle.loads(response)
             return decoded_response
         except TypeError as e:

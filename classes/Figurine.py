@@ -12,7 +12,7 @@ class Figurine:
         self.side = side
         self.strength = strength
         self.selected = False
-        self.region = None
+        self.region = 'None'
 
     def change_position(self, position):
         self.x, self.y = position
@@ -20,7 +20,7 @@ class Figurine:
     def draw(self, win, position, side):
         self.x = position[0]
         self.y = position[1]
-        pygame.draw.rect(win, (170, 170, 255), (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(win, (70, 70, 55), (self.x, self.y, self.width, self.height))
         border = (0, 255, 0) if self.selected else (0, 0, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
         font = pygame.font.SysFont("cosmicsans", 40)

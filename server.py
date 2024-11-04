@@ -38,8 +38,10 @@ def threaded_client(conn, p, gameId):
 
                     if not data:
                         break
-                    elif data == 'next_turn':
-                        game.next_turn()
+                    elif data.startswith('next_turn'):
+                        print('next turn')
+                        cmd, player = data.split(',')
+                        game.next_turn(int(player))
                         print('turn: ', game.turn)
                         conn.sendall(pickle.dumps(game))
                     else:
