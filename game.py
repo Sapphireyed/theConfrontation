@@ -17,10 +17,12 @@ class Game:
         }
         self.players = {
             0: {
-                'side': sideP1
+                'side': sideP1,
+                'ready': False
             },
             1: {
-                'side': sideP2
+                'side': sideP2,
+                'ready': False
             }
         }
         self.chars = {
@@ -34,8 +36,11 @@ class Game:
     def init_regions(self, regions, side):
         self.regions[side] = regions
 
-    def next_turn(self):
-        self.turn += 1
+    def next_turn(self, player):
+        if self.turn == 0:
+            self.players[player]['ready'] = True
+        if self.players[0]['ready'] and self.players[1]['ready']:
+            self.turn += 1
 
     def update_chars(self, char):
         name = char.name
@@ -48,11 +53,21 @@ class Game:
         pass
 
     def update_regions(self, reg, side):
-        for i, r in enumerate(self.regions[side]):
+        for i, r in enumerate(self.regions[0]):
             if r.name == reg.name:
-                self.regions[side][i].x = reg.x
-                self.regions[side][i].y = reg.y
-                self.regions[side][i].selected = reg.selected
+                region = self.regions[side][i]
+                region.x = reg.x
+                region.y = reg.y
+                region.selected = reg.selected
+                region.population = reg.population
+                break
+        for i, r in enumerate(self.regions[1]):
+            if r.name == reg.name:
+                region = self.regions[side][i]
+                region.x = reg.x
+                region.y = reg.y
+                region.selected = reg.selected
+                region.population = reg.population
                 break
 
 
