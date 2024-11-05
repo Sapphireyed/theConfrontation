@@ -10,5 +10,5 @@ class Board:
         self.height = 900
         self.color = (128, 128, 128)
 
-    def draw(self, win):
+    def draw(self, win, side):
         pygame.draw.rect(win, self.color, (0, 0, self.width, self.height))

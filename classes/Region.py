@@ -3,7 +3,7 @@ from utils.regionsData import get_regions
 pygame.font.init()
 
 class Region:
-    def __init__(self, name, skill, player, position, limit):
+    def __init__(self, name, skill, player, position, limit, top_to, next_to, bottom_to):
         self.x = 0
         self.y = 0
         self.width = 180
@@ -20,6 +20,9 @@ class Region:
         self.population = 0
         self.chars = []
         self.calculate_position()
+        self.top_to = top_to
+        self.next_to = next_to
+        self.bottom_to = bottom_to
 
     def calculate_position(self):
         if self.position == 1:

@@ -10,16 +10,32 @@ def waitForPlayer(win, width, height):
 
 def drawBoard(win, Board, regions, n, side):
     board = Board()
-    board.draw(win)
+    board.draw(win, side)
 
     for r in regions:
         r.draw(win)
         if r.x == 0 and r.y == 0:
             n.send({'msg': 'reg_update', 'reg': r, 'side': side})
 
+    # image = pygame.image.load('assets/board.png')
+    # image = pygame.transform.scale(image, (750, 800))
+    #
+    # if side == 0:
+    #     image = pygame.transform.rotate(image, 180)
+    # win.blit(image, (-20, 150))
+
 def initialize_regions(side, player, n):
     regions_data = get_regions(side)
-    regions = [Region(region_info['name'], '', player, region_info['position'], region_info['limit']) for region_name, region_info in regions_data.items()]
+
+    regions = [Region(
+        region_info['name'],
+        '',
+        player,
+        region_info['position'],
+        region_info['limit'],
+        region_info['top_to'],
+        region_info['next_to'],
+        region_info['bottom_to']) for region_name, region_info in regions_data.items()]
 
     n.send({'msg': 'init_regions', 'regions': regions, 'side': side})
 
@@ -49,33 +65,33 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
             r.selected = True
 
             if char_selected:
-                if (len(r.chars) < r.limit and
+                prev_reg = next(
+                    (reg for reg in game.regions[side] if reg.name.lower() == char_selected[1].region.lower()), None)
+                if (r.population < r.limit and
                     ((r.name in char_selected[1].starts and not bothReady(game)) or
-                     (bothReady(game)))
+                     (r.name in prev_reg.top_to and bothReady(game)))
                 ):
                     if len(r.chars) == 0 and r.limit == 2:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
                         char_selected[1].y = r.y + 10
                     elif len(r.chars) == 1 and r.limit == 2:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
-                        char_selected[1].y = r.y + 50
+                        char_selected[1].y = r.y + 40
                     elif len(r.chars) == 0 and r.limit == 4:
                         char_selected[1].x = r.x + 10
                         char_selected[1].y = r.y + 10
                     elif len(r.chars) == 1 and r.limit == 4:
                         char_selected[1].x = r.x + 10
-                        char_selected[1].y = r.y + 50
+                        char_selected[1].y = r.y + 40
                     elif len(r.chars) == 2 and r.limit == 4:
                         char_selected[1].x = r.x + r.width/2
                         char_selected[1].y = r.y + 10
                     elif len(r.chars) == 3 and r.limit == 4:
                         char_selected[1].x = r.x + r.width/2
-                        char_selected[1].y = r.y + 50
+                        char_selected[1].y = r.y + 40
                     else:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
                         char_selected[1].y = r.y + r.height / 2 - char_selected[1].height / 2
-
-                    prev_reg = next((reg for reg in game.regions[side] if reg.name.lower() == char_selected[1].region.lower()), None)
 
                     if prev_reg:
                         prev_reg.population -= 1
