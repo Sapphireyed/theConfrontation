@@ -53,13 +53,11 @@ class Game:
         pass
 
     def update_regions(self, reg, side):
-        print('side', side)
         for i, r in enumerate(self.regions[side]):
             if r and r.name and r.name == reg.name:
                 self.regions[side][i] = reg
                 break
-        print(self.regions[0][0].chars)
-        print(self.regions[1][0].chars)
+
 
 
 

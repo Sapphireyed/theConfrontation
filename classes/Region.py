@@ -88,7 +88,7 @@ class Region:
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
-        border = (0, 0, 0) if not self.selected else (0, 255, 0)
+        border = (0, 0, 0) #if not self.selected else (0, 255, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
         font = pygame.font.SysFont("cosmicsans", 20)
         text = font.render(self.name, 1, (0, 0, 0))
