@@ -32,7 +32,33 @@ def redrawWindow(win, game, n, side):
             if utils.bothReady(game):
                 for f, char in game.chars.items():
                     reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == char.region.lower()), None)
-                    char.draw(win, (reg_in.x, reg_in.y), side)
+
+                    if not len(reg_in.chars) > 0:
+                        reg_in_enemy = next((reg for reg in game.regions[0 if side == 1 else 1] if reg.name.lower() == char.region.lower()), None)
+                        reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == reg_in_enemy.name.lower()), None)
+                        reg_in.chars = reg_in_enemy.chars
+
+                    if len(reg_in.chars) > 0:
+                        if reg_in.limit == 2:
+                            x = reg_in.x + reg_in.width/2 - char.width/2
+                            y = reg_in.y + 10 if reg_in.chars[0].name.lower() == char.name.lower() else reg_in.y + 50
+                            char.draw(win, (x, y), side)
+                        elif reg_in.limit == 4:
+                            x, y = 0, 0
+                            if char.name.lower() == reg_in.chars[0].name.lower():
+                                x = reg_in.x + 10
+                                y = reg_in.y + 10
+                            elif char.name.lower() == reg_in.chars[1].name.lower():
+                                x = reg_in.x + 10
+                                y = reg_in.y + 50
+                            elif char.name.lower() == reg_in.chars[2].name.lower():
+                                x = reg_in.x + reg_in.width/2
+                                y = reg_in.y + 10
+                            elif char.name.lower() == reg_in.chars[3].name.lower():
+                                x = reg_in.x  + reg_in.width/2
+                                y = reg_in.y + 50
+                            char.draw(win, (x, y), side)
+
 
     pygame.display.update()
 
@@ -77,7 +103,7 @@ def main():
                     n.send(f'next_turn,{player}')
 
                 utils.handleCharClick(game, side, pos, n)
-                utils.handleRegClick(char_selected, pos, side_regs, n, side)
+                utils.handleRegClick(char_selected, pos, side_regs, n, side, game)
 
         redrawWindow(win, game, n, side)
 
