@@ -1,6 +1,8 @@
 import random
 from utils.charsData import chars
 from classes.Figurine import Figurine
+from classes.Card import Card
+from utils.cardsData import cards
 
 sides = [0, 1]
 sideP1 = random.choice(sides)
@@ -18,11 +20,13 @@ class Game:
         self.players = {
             0: {
                 'side': sideP1,
-                'ready': False
+                'ready': False,
+                'cards': self.init_cards(sideP1)
             },
             1: {
                 'side': sideP2,
-                'ready': False
+                'ready': False,
+                'cards': self.init_cards(sideP2)
             }
         }
         self.chars = {
@@ -35,6 +39,13 @@ class Game:
 
     def init_regions(self, regions, side):
         self.regions[side] = regions
+
+    def init_cards(self, side):
+        char_cards = []
+        for i, card in enumerate(cards[side]):
+            card = Card(side, i, card)
+            char_cards.append(card)
+        return char_cards
 
     def next_turn(self, player):
         if self.turn == 0:

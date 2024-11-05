@@ -31,6 +31,9 @@ def redrawWindow(win, game, n, side):
             start.text = 'end turn'
             start.draw(win)
             if utils.bothReady(game):
+                for card in game.players[side]['cards']:
+                    card.draw(win)
+
                 for f, char in game.chars.items():
                     reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == char.region.lower()), None)
 
@@ -77,7 +80,6 @@ def main():
     try:
         game = n.send("get")
         side = game.players[player]['side']
-
     except Exception as e:
         running = False
         print("Couldn't get game", e)
