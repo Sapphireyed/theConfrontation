@@ -5,11 +5,12 @@ class Figurine:
     def __init__(self, name, skill, strength, side):
         self.x = 0
         self.y = 0
-        self.width = 60
+        self.width = 90
         self.height = 40
         self.name = name
         self.skill = skill
         self.side = side
+        self.color = (0,0, 0) if self.side == 1 else (255, 255, 255)
         self.strength = strength
         self.selected = False
         self.region = 'None'
@@ -23,13 +24,16 @@ class Figurine:
     def draw(self, win, position, side):
         self.x = position[0]
         self.y = position[1]
-        pygame.draw.rect(win, (70, 70, 55), (self.x, self.y, self.width, self.height))
-        border = (0, 255, 0) if self.selected else (0, 0, 0)
+        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+        border = (0, 255, 0) if self.selected and side == self.side else (0, 0, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
-        font = pygame.font.SysFont("cosmicsans", 32)
-        text = font.render(self.name + '  ' + str(self.strength), 1, (0, 0, 0))
-        win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
-                         self.y + round(self.height / 2) - round(text.get_height() / 2)))
+
+        if side == self.side:
+            font = pygame.font.SysFont("cosmicsans", 32)
+            text_color = (0, 0, 0) if self.side == 0 else (255, 255, 255)
+            text = font.render(self.name + '  ' + str(self.strength), 1, text_color)
+            win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
+                             self.y + round(self.height / 2) - round(text.get_height() / 2)))
 
     def clicked(self, pos):
         mouseX = pos[0]

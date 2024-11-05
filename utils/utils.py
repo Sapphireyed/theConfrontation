@@ -49,8 +49,9 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
             r.selected = True
 
             if char_selected:
-                if (r.population < r.limit and
-                    (r.name in char_selected[1].starts and not bothReady(game))
+                if (len(r.chars) < r.limit and
+                    ((r.name in char_selected[1].starts and not bothReady(game)) or
+                     (bothReady(game)))
                 ):
                     if len(r.chars) == 0 and r.limit == 2:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
@@ -73,6 +74,13 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
                     else:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
                         char_selected[1].y = r.y + r.height / 2 - char_selected[1].height / 2
+
+                    prev_reg = next((reg for reg in game.regions[side] if reg.name.lower() == char_selected[1].region.lower()), None)
+
+                    if prev_reg:
+                        prev_reg.population -= 1
+                        prev_reg.chars = [f for f in prev_reg.chars if f.name.lower() != char_selected[1].name.lower()]
+                        n.send({'msg': 'reg_update', 'reg': prev_reg, 'side': side})
 
                     char_selected[1].region = r.name
                     n.send({'msg': 'char_update', 'char': char_selected[1]})
