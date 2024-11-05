@@ -9,6 +9,7 @@ class Region:
         self.width = 180
         self.height = 100
         self.color = (170, 170, 255)
+        self.orgColor = (170, 170, 255)
         self.position = position
         self.name = name
         self.skill = skill
@@ -17,6 +18,7 @@ class Region:
         self.selected = False
         self.limit = limit
         self.population = 0
+        self.chars = []
         self.calculate_position()
 
     def calculate_position(self):
@@ -88,7 +90,7 @@ class Region:
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
         border = (0, 0, 0) if not self.selected else (0, 255, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
-        font = pygame.font.SysFont("cosmicsans", 40)
+        font = pygame.font.SysFont("cosmicsans", 20)
         text = font.render(self.name, 1, (0, 0, 0))
         win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
                         self.y + round(self.height / 2) - round(text.get_height() / 2)))

@@ -13,6 +13,9 @@ class Figurine:
         self.strength = strength
         self.selected = False
         self.region = 'None'
+        self.starts = ['shire', 'good1', 'good2', 'good3', 'good4', 'good5'] \
+            if self.side == 0 \
+            else ['mordor', 'evil1', 'evil2', 'evil3', 'evil4', 'evil5']
 
     def change_position(self, position):
         self.x, self.y = position
@@ -23,7 +26,7 @@ class Figurine:
         pygame.draw.rect(win, (70, 70, 55), (self.x, self.y, self.width, self.height))
         border = (0, 255, 0) if self.selected else (0, 0, 0)
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
-        font = pygame.font.SysFont("cosmicsans", 40)
+        font = pygame.font.SysFont("cosmicsans", 32)
         text = font.render(self.name + '  ' + str(self.strength), 1, (0, 0, 0))
         win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
                          self.y + round(self.height / 2) - round(text.get_height() / 2)))

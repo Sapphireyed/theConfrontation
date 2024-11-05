@@ -15,7 +15,7 @@ class Network:
     def connect(self):
         try:
             self.client.connect(self.addr)
-            initial_data = self.client.recv(2048).decode()
+            initial_data = self.client.recv(4096*3).decode()
             #print('network data received in connect: ', initial_data)
             return initial_data
 
@@ -29,12 +29,10 @@ class Network:
             else:
                 self.client.send(pickle.dumps(data))
 
-            response = self.client.recv(4096*2)
+            response = self.client.recv(4096*3)
             decoded_response = pickle.loads(response)
             return decoded_response
         except TypeError as e:
             print("error in sending in network.py: ", e)
         except socket.error as e:
             print("error in sending in network.py, socket error: ", e)
-        except Exception as e:
-            print('error in send', Exception)
