@@ -30,7 +30,7 @@ def threaded_client(conn, p, gameId):
 
     while True:
         try:
-            raw_data = conn.recv(4096*3)
+            raw_data = conn.recv(4096*4)
             try:
                 data = raw_data.decode()
                 if gameId in games:

@@ -11,6 +11,7 @@ width = 900
 height = 900
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("The Confrontation")
+image = pygame.image.load('assets/board.png')
 
 start = Button('Start game', (200, 200, 250))
 
@@ -50,14 +51,18 @@ def redrawWindow(win, game, n, side):
                                 y = reg_in.y + 10
                             elif char.name.lower() == reg_in.chars[1].name.lower():
                                 x = reg_in.x + 10
-                                y = reg_in.y + 50
+                                y = reg_in.y + 40
                             elif char.name.lower() == reg_in.chars[2].name.lower():
                                 x = reg_in.x + reg_in.width/2
                                 y = reg_in.y + 10
                             elif char.name.lower() == reg_in.chars[3].name.lower():
                                 x = reg_in.x  + reg_in.width/2
-                                y = reg_in.y + 50
-                            char.draw(win, (x, y), side)
+                                y = reg_in.y + 40
+                        else:
+                            x = reg_in.x + reg_in.width / 2 - char.width / 2
+                            y = reg_in.y + reg_in.height / 2 - char.height / 2
+
+                        char.draw(win, (x, y), side)
 
 
     pygame.display.update()
@@ -72,6 +77,7 @@ def main():
     try:
         game = n.send("get")
         side = game.players[player]['side']
+
     except Exception as e:
         running = False
         print("Couldn't get game", e)

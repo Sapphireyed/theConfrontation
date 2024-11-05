@@ -58,6 +58,10 @@ class Game:
                 self.regions[side][i] = reg
                 break
 
+            val = 0 if side == 1 else 1
+            reg_enemy = next((r for r in self.regions[val] if r.name.lower() == reg.name), None )
+            reg_enemy.population = reg.population
+
 
 
 
