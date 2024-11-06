@@ -106,7 +106,7 @@ def get_regions(side):
             'selected': False,
             'available': False,
             'limit': 2,
-            'top_to': ['m3', 'm4'] if side == 1 else ['evil2'],
+            'top_to': ['m1', 'm2'] if side == 1 else ['evil2'],
             'next_to': ['evil4'],
             'bottom_to': ['evil2'] if side == 1 else ['m3', 'm4']
         },
@@ -126,7 +126,7 @@ def get_regions(side):
             'selected': False,
             'available': False,
             'limit': 2,
-            'top_to': ['m1', 'm2'] if side == 1 else ['evil1'],
+            'top_to': ['m3', 'm4'] if side == 1 else ['evil1'],
             'next_to': ['evil4'],
             'bottom_to': ['evil1'] if side == 1 else ['m1', 'm2']
         },

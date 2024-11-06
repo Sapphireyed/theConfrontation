@@ -24,13 +24,12 @@ def drawBoard(win, Board, regions, n, side):
     #     image = pygame.transform.rotate(image, 180)
     # win.blit(image, (-20, 150))
 
-def initialize_regions(side, player, n):
+def initialize_regions(side, n):
     regions_data = get_regions(side)
 
     regions = [Region(
         region_info['name'],
         '',
-        player,
         region_info['position'],
         region_info['limit'],
         region_info['top_to'],
@@ -42,7 +41,7 @@ def initialize_regions(side, player, n):
 def bothReady(game):
     return game.players[0]['ready'] and game.players[1]['ready']
 
-def handleCharClick(game, side, pos, n):
+def handleCharClick(game, side, pos, n, player):
     side_chars = filter(lambda char: char[1].side == side, game.chars.items())
     for reg in game.regions[side]:
         reg.color = reg.orgColor
@@ -53,15 +52,15 @@ def handleCharClick(game, side, pos, n):
 
         if char.clicked(pos):
             char.selected = True
-        n.send({'msg': 'char_update', 'char': char})
+        n.send({'msg': 'char_update', 'char': char, 'clicked': True})
 
         highlightAvailableRegions(char, side, game, n)
 
-def handleRegClick(char_selected, pos, side_regs, n, side, game):
+def handleRegClick(char_selected, pos, side_regs, n, side, game, player):
     for r in side_regs:
         r.selected = False
 
-        if r.clicked(pos):
+        if r.clicked(pos) and game.players[player]['hisTurn']:
             r.selected = True
 
             if char_selected:
@@ -69,7 +68,7 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
                     (reg for reg in game.regions[side] if reg.name.lower() == char_selected[1].region.lower()), None)
                 if (r.population < r.limit and
                     ((r.name in char_selected[1].starts and not bothReady(game)) or
-                     (r.name in prev_reg.top_to and bothReady(game)))
+                     (prev_reg and r.name in prev_reg.top_to and bothReady(game) and game.players[player]['moveCount'] < 1))
                 ):
                     if len(r.chars) == 0 and r.limit == 2:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
@@ -100,6 +99,7 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
 
                     char_selected[1].region = r.name
                     n.send({'msg': 'char_update', 'char': char_selected[1]})
+                    n.send({'msg': 'moves_update', 'player': player})
                     r.population += 1
                     r.chars.append(char_selected[1])
                     random.shuffle(r.chars)
@@ -107,6 +107,12 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game):
                     r.color = (200, 100, 100)
 
         n.send({'msg': 'reg_update', 'reg': r, 'side': side})
+
+def handleCardClick(pos, n, game, player):
+    for card in game.players[player].cards:
+        card.selected = False
+        if card.clicked(pos):
+            card.selected = True
 
 def highlightAvailableRegions(char, side, game, n):
     if not bothReady(game):

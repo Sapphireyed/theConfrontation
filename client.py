@@ -4,6 +4,7 @@ from network import Network
 from classes.Button import Button
 import utils.utils as utils
 from utils.setupTurn import setupTurn
+from utils.utils import bothReady
 
 pygame.init()
 
@@ -13,10 +14,8 @@ win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("The Confrontation")
 image = pygame.image.load('assets/board.png')
 
-start = Button('Start game', (200, 200, 250))
 
-
-def redrawWindow(win, game, n, side):
+def redrawWindow(win, game, n, side, start):
     win.fill((0, 168, 168))
     regions = game.regions[side]
 
@@ -29,8 +28,11 @@ def redrawWindow(win, game, n, side):
             setupTurn(game, side, n, win, start)
         else:
             start.text = 'end turn'
-            start.draw(win)
+            start.draw(win, game, side)
             if utils.bothReady(game):
+                for card in game.players[side]['cards']:
+                    card.draw(win)
+
                 for f, char in game.chars.items():
                     reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == char.region.lower()), None)
 
@@ -77,13 +79,13 @@ def main():
     try:
         game = n.send("get")
         side = game.players[player]['side']
-
+        start = Button('Start game')
     except Exception as e:
         running = False
         print("Couldn't get game", e)
         return
 
-    utils.initialize_regions(side, player, n)
+    utils.initialize_regions(side, n)
 
     while running:
         clock.tick(60)
@@ -106,11 +108,14 @@ def main():
                 side_regs = game.regions[side]
 
                 if start.click(pos):
-                    n.send(f'next_turn,{player}')
+                    if game.turn == 0 or (game.turn % 2 == 0 and side == 0) or (game.turn % 2 != 0 and side == 1):
+                        n.send(f'next_turn,{player}')
 
-                utils.handleCharClick(game, side, pos, n)
-                utils.handleRegClick(char_selected, pos, side_regs, n, side, game)
+                utils.handleCharClick(game, side, pos, n, player)
+                utils.handleRegClick(char_selected, pos, side_regs, n, side, game, player)
+                # if bothReady(game):
+                #     utils.handleCardClick(pos, n, game, side)
 
-        redrawWindow(win, game, n, side)
+        redrawWindow(win, game, n, side, start)
 
 main()
