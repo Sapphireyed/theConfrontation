@@ -29,6 +29,8 @@ def redrawWindow(win, game, n, side, start):
         else:
             start.text = 'end turn'
             start.draw(win, game, side)
+            utils.turn_text(win, f'TURN {game.turn}')
+
             if utils.bothReady(game):
                 for card in game.players[side]['cards']:
                     card.draw(win)

@@ -3,9 +3,14 @@ import random
 from classes.Region import Region
 from utils.regionsData import get_regions
 
+def turn_text(win, text):
+    font = pygame.font.SysFont("comicsans", 40)
+    text = font.render(text, 1, (255, 0, 0), (128, 128, 128))
+    win.blit(text, (700 / 2 - text.get_width() / 2, 20))
+
 def waitForPlayer(win, width, height):
     font = pygame.font.SysFont("comicsans", 80)
-    text = font.render("Waiting for Player...", 1, (255, 0, 0), True)
+    text = font.render("Waiting for Player...", 1, (128, 128, 128), True)
     win.blit(text, (width / 2 - text.get_width() / 2, height / 2 - text.get_height() / 2))
 
 def drawBoard(win, Board, regions, n, side):

@@ -3,7 +3,7 @@ chars = {
         {
             'name': 'Nazgul',
             'skill': '',
-            'strength': 5,
+            'strength': 3,
             'side': 1
         },
         {
@@ -13,43 +13,43 @@ chars = {
             'side': 1
         },
         {
-            'name': 'Szeloba',
+            'name': 'Shelob',
+            'skill': '',
+            'strength': 5,
+            'side': 1
+        },
+        {
+            'name': 'Witch-King',
+            'skill': '',
+            'strength': 5,
+            'side': 1
+        },
+        {
+            'name': 'Saruman',
             'skill': '',
             'strength': 4,
             'side': 1
         },
         {
-            'name': 'Uruk-hai',
-            'skill': '',
-            'strength': 4,
-            'side': 1
-        },
-        {
-            'name': 'ork',
-            'skill': '',
-            'strength': 3,
-            'side': 1
-        },
-        {
-            'name': 'warg',
-            'skill': '',
-            'strength': 4,
-            'side': 1
-        },
-        {
-            'name': 'ork2',
+            'name': 'Orcs',
             'skill': '',
             'strength': 2,
             'side': 1
         },
         {
-            'name': 'ork3',
+            'name': 'Warg',
             'skill': '',
             'strength': 2,
             'side': 1
         },
         {
-            'name': 'ork4',
+            'name': 'Troll',
+            'skill': '',
+            'strength': 9,
+            'side': 1
+        },
+        {
+            'name': 'Black Rider',
             'skill': '',
             'strength': 3,
             'side': 1
@@ -59,7 +59,7 @@ chars = {
         {
             'name': 'Frodo',
             'skill': '',
-            'strength': 2,
+            'strength': 1,
             'side': 0
         },
         {
@@ -77,13 +77,13 @@ chars = {
         {
             'name': 'Gandalf',
             'skill': '',
-            'strength': 3,
+            'strength': 5,
             'side': 0
         },
         {
             'name': 'Boromir',
             'skill': '',
-            'strength': 4,
+            'strength': 0,
             'side': 0
         },
         {
@@ -107,7 +107,7 @@ chars = {
         {
             'name': 'Pipin',
             'skill': '',
-            'strength': 2,
+            'strength': 1,
             'side': 0
         }
     ]
