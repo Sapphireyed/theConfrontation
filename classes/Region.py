@@ -1,9 +1,8 @@
 import pygame
-from utils.regionsData import get_regions
 pygame.font.init()
 
 class Region:
-    def __init__(self, name, skill, player, position, limit, top_to, next_to, bottom_to):
+    def __init__(self, name, skill, position, limit, top_to, next_to, bottom_to):
         self.x = 0
         self.y = 0
         self.width = 180
@@ -14,7 +13,6 @@ class Region:
         self.name = name
         self.skill = skill
         self.numOfFig = 0
-        self.region_state = get_regions(player)[self.name]
         self.selected = False
         self.limit = limit
         self.population = 0

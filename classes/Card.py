@@ -10,6 +10,7 @@ class Card():
         self.width = 100
         self.height = 30
         self.text = text
+        self.selected = False
         self.discarded = False
 
     def calculateY(self, pos):

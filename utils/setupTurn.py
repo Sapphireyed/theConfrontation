@@ -9,4 +9,4 @@ def setupTurn(game, side, n, win, start):
             char.draw(win, (char.x, char.y), side)
             y += 80
 
-    start.draw(win)
+    start.draw(win, game, side)

@@ -2,7 +2,7 @@ import pygame
 pygame.font.init()
 
 class Figurine:
-    def __init__(self, name, skill, strength, side):
+    def __init__(self, name, skill, strength, side, turn):
         self.x = 0
         self.y = 0
         self.width = 90
@@ -14,9 +14,11 @@ class Figurine:
         self.strength = strength
         self.selected = False
         self.region = 'None'
+        self.clickable = True if turn == 0 or (self.side == 0 and turn % 2 == 0) or (self.side == 1 and turn % 2 != 0) else False
         self.starts = ['shire', 'good1', 'good2', 'good3', 'good4', 'good5'] \
             if self.side == 0 \
             else ['mordor', 'evil1', 'evil2', 'evil3', 'evil4', 'evil5']
+
 
     def change_position(self, position):
         self.x, self.y = position

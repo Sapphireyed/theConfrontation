@@ -60,6 +60,8 @@ def threaded_client(conn, p, gameId):
                         elif data['msg'] == 'char_update':
                             char = data['char']
                             game.update_chars(char)
+                        elif data['msg'] == 'moves_update':
+                            game.update_player_moves(data['player'])
                         elif data['msg'] == 'reg_update':
                             reg = data['reg']
                             game.update_regions(reg, data['side'])
@@ -97,6 +99,5 @@ while True:
     else:
         games[gameId].ready = True
         p = 1
-
 
     start_new_thread(threaded_client, (conn, p, gameId))
