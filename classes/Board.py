@@ -12,3 +12,8 @@ class Board:
 
     def draw(self, win, side):
         pygame.draw.rect(win, self.color, (0, 0, self.width, self.height))
+        image = pygame.image.load('assets/board.png')
+        image = pygame.transform.scale(image, (700, 700))
+        if side == 0:
+            image = pygame.transform.rotate(image, 180)
+        win.blit(image, (0, 190))

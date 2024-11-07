@@ -1,8 +1,13 @@
 def get_regions(side):
+    def_h = 90
+    mordor_h = 140
+    shire_h = 120
+    m_h = 60
     regions = {
         "shire": {
            'name': 'shire',
             'position': 1 if side == 0 else 16,
+            'height': shire_h,
             'selected': False,
             'available': False,
             'limit': 4,
@@ -13,6 +18,7 @@ def get_regions(side):
         'good1': {
             'name': 'good1',
             'position': 2 if side == 0 else 15,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -23,6 +29,7 @@ def get_regions(side):
         'good2': {
             'name': 'good2',
             'position': 3 if side == 0 else 14,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -33,6 +40,7 @@ def get_regions(side):
         'good3': {
             'name': 'good3',
             'position': 4 if side == 0 else 13,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -43,6 +51,7 @@ def get_regions(side):
         'good4': {
             'name': 'good4',
             'position': 5 if side == 0 else 12,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -53,6 +62,7 @@ def get_regions(side):
         'good5': {
             'name': 'good5',
             'position': 6 if side == 0 else 11,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -63,6 +73,7 @@ def get_regions(side):
         'm1': {
             'name': 'm1',
             'position': 7 if side == 0 else 10,
+            'height': m_h,
             'selected': False,
             'available': False,
             'limit': 1,
@@ -73,6 +84,7 @@ def get_regions(side):
         'm2': {
             'name': 'm2',
             'position': 8 if side == 0 else 9,
+            'height': m_h,
             'selected': False,
             'available': False,
             'limit': 1,
@@ -83,6 +95,7 @@ def get_regions(side):
         'm3': {
             'name': 'm3',
             'position': 9 if side == 0 else 8,
+            'height': m_h,
             'selected': False,
             'available': False,
             'limit': 1,
@@ -93,6 +106,7 @@ def get_regions(side):
         'm4': {
             'name': 'm4',
             'position': 10 if side == 0 else 7,
+            'height': m_h,
             'selected': False,
             'available': False,
             'limit': 1,
@@ -103,6 +117,7 @@ def get_regions(side):
         'evil5': {
             'name': 'evil5',
             'position': 11 if side == 0 else 6,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -113,6 +128,7 @@ def get_regions(side):
         'evil4': {
             'name': 'evil4',
             'position': 12 if side == 0 else 5,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -123,6 +139,7 @@ def get_regions(side):
         'evil3': {
             'name': 'evil3',
             'position': 13 if side == 0 else 4,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -133,6 +150,7 @@ def get_regions(side):
         'evil2': {
             'name': 'evil2',
             'position': 14 if side == 0 else 3,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -143,6 +161,7 @@ def get_regions(side):
         'evil1': {
             'name': 'evil1',
             'position': 15 if side == 0 else 2,
+            'height': def_h,
             'selected': False,
             'available': False,
             'limit': 2,
@@ -153,6 +172,7 @@ def get_regions(side):
         'mordor': {
             'name': 'mordor',
             'position': 16 if side == 0 else 1,
+            'height': mordor_h,
             'selected': False,
             'available': False,
             'limit': 4,

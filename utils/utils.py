@@ -23,13 +23,6 @@ def drawBoard(win, Board, regions, n, side):
         if r.x == 0 and r.y == 0:
             n.send({'msg': 'reg_update', 'reg': r, 'side': side})
 
-    # image = pygame.image.load('assets/board.png')
-    # image = pygame.transform.scale(image, (750, 800))
-    #
-    # if side == 0:
-    #     image = pygame.transform.rotate(image, 180)
-    # win.blit(image, (-20, 150))
-
 def initialize_regions(side, n):
     regions_data = get_regions(side)
 
@@ -37,10 +30,12 @@ def initialize_regions(side, n):
         region_info['name'],
         '',
         region_info['position'],
+        region_info['height'],
         region_info['limit'],
         region_info['top_to'],
         region_info['next_to'],
-        region_info['bottom_to']) for region_name, region_info in regions_data.items()]
+        region_info['bottom_to'],
+        side) for region_name, region_info in regions_data.items()]
 
     n.send({'msg': 'init_regions', 'regions': regions, 'side': side})
 
@@ -78,6 +73,7 @@ def handleCharClick(game, side, pos, n, player):
     side_chars = filter(lambda char: char[1].side == side, game.chars.items())
     for reg in game.regions[side]:
         reg.color = reg.orgColor
+        reg.available = False
         n.send({'msg': 'reg_update', 'reg': reg, 'side': side})
 
     for f, char in side_chars:
@@ -158,6 +154,7 @@ def highlightAvailableRegions(char, side, game, n):
 
         for reg in available_regions:
             reg.color = (100, 255, 100)
+            reg.available = True
             n.send({'msg': 'reg_update', 'reg': reg, 'side': side})
 
 def move_chas(char_selected, r, player, n):

@@ -13,7 +13,6 @@ width = 900
 height = 900
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("The Confrontation")
-image = pygame.image.load('assets/board.png')
 
 overlay = utils.createOverlay(width, height)
 
@@ -27,8 +26,6 @@ def redrawWindow(win, game, n, side, start, player):
         utils.waitForPlayer(win, width, height)
     else:
         utils.drawBoard(win, Board, regions, n, side)
-        # image = pygame.transform.scale(image, (700, 730))
-        # win.blit(image, (0, 190))
 
         if game.turn == 0:
             setupTurn(game, side, n, win, start)
