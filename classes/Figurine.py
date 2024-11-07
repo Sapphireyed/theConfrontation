@@ -6,7 +6,7 @@ class Figurine:
         self.x = 0
         self.y = 0
         self.width = 90
-        self.height = 30
+        self.height = 25
         self.name = name
         self.skill = skill
         self.side = side
@@ -31,7 +31,7 @@ class Figurine:
         pygame.draw.rect(win, border, (self.x, self.y, self.width, self.height), 3)
 
         if side == self.side:
-            font = pygame.font.SysFont("cosmicsans", 26)
+            font = pygame.font.SysFont("cosmicsans", 24)
             text_color = (0, 0, 0) if self.side == 0 else (255, 255, 255)
             text = font.render(self.name + '  ' + str(self.strength), 1, text_color)
             win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
