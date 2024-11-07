@@ -4,7 +4,8 @@ from network import Network
 from classes.Button import Button
 import utils.utils as utils
 from utils.setupTurn import setupTurn
-from utils.utils import bothReady
+import utils.ifChecks as ifChecks
+import utils.calculations as calc
 
 pygame.init()
 
@@ -12,10 +13,12 @@ width = 900
 height = 900
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("The Confrontation")
-image = pygame.image.load('assets/board.png')
+
+overlay = utils.createOverlay(width, height)
 
 
-def redrawWindow(win, game, n, side, start):
+def redrawWindow(win, game, n, side, start, player):
+    global image
     win.fill((0, 168, 168))
     regions = game.regions[side]
 
@@ -27,47 +30,15 @@ def redrawWindow(win, game, n, side, start):
         if game.turn == 0:
             setupTurn(game, side, n, win, start)
         else:
-            start.text = 'end turn'
-            start.draw(win, game, side)
-            utils.turn_text(win, f'TURN {game.turn}')
+            utils.coverInactivePlayer(win, game, side, overlay)
+            utils.drawCards(win, game, player)
 
-            if utils.bothReady(game):
-                for card in game.players[side]['cards']:
-                    card.draw(win)
+            for f, char in game.chars.items():
+                reg_in = utils.getRegIn(game, side, char)
 
-                for f, char in game.chars.items():
-                    reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == char.region.lower()), None)
-
-                    if not len(reg_in.chars) > 0:
-                        reg_in_enemy = next((reg for reg in game.regions[0 if side == 1 else 1] if reg.name.lower() == char.region.lower()), None)
-                        reg_in = next((reg for reg in game.regions[side] if reg.name.lower() == reg_in_enemy.name.lower()), None)
-                        reg_in.chars = reg_in_enemy.chars
-
-                    if len(reg_in.chars) > 0:
-                        if reg_in.limit == 2:
-                            x = reg_in.x + reg_in.width/2 - char.width/2
-                            y = reg_in.y + 10 if reg_in.chars[0].name.lower() == char.name.lower() else reg_in.y + 50
-                            char.draw(win, (x, y), side)
-                        elif reg_in.limit == 4:
-                            x, y = 0, 0
-                            if char.name.lower() == reg_in.chars[0].name.lower():
-                                x = reg_in.x + 10
-                                y = reg_in.y + 10
-                            elif char.name.lower() == reg_in.chars[1].name.lower():
-                                x = reg_in.x + 10
-                                y = reg_in.y + 40
-                            elif char.name.lower() == reg_in.chars[2].name.lower():
-                                x = reg_in.x + reg_in.width/2
-                                y = reg_in.y + 10
-                            elif char.name.lower() == reg_in.chars[3].name.lower():
-                                x = reg_in.x  + reg_in.width/2
-                                y = reg_in.y + 40
-                        else:
-                            x = reg_in.x + reg_in.width / 2 - char.width / 2
-                            y = reg_in.y + reg_in.height / 2 - char.height / 2
-
-                        char.draw(win, (x, y), side)
-
+                if reg_in and len(reg_in.chars) > 0:
+                    x, y = calc.get_char_coordinates_init(win, reg_in, char, side)
+                    char.draw(win, (x, y), side)
 
     pygame.display.update()
 
@@ -109,15 +80,14 @@ def main():
                 char_selected = next(filter(lambda char: char[1].selected, game.chars.items()), None)
                 side_regs = game.regions[side]
 
-                if start.click(pos):
-                    if game.turn == 0 or (game.turn % 2 == 0 and side == 0) or (game.turn % 2 != 0 and side == 1):
-                        n.send(f'next_turn,{player}')
+                if start.click(pos) and game.turn == 0:
+                    n.send(f'next_turn,{player}')
 
                 utils.handleCharClick(game, side, pos, n, player)
                 utils.handleRegClick(char_selected, pos, side_regs, n, side, game, player)
-                # if bothReady(game):
-                #     utils.handleCardClick(pos, n, game, side)
+                if ifChecks.both_ready(game):
+                    utils.handleCardClick(pos, n, game, side)
 
-        redrawWindow(win, game, n, side, start)
+        redrawWindow(win, game, n, side, start, player)
 
 main()

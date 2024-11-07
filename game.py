@@ -25,14 +25,16 @@ class Game:
                 'side': sideP1,
                 'ready': False,
                 'moveCount': 0,
-                'cards': self.init_cards(sideP1),
+                'cards': self.init_cards(sideP1)[0],
+                'enemy_cards':  self.init_cards(sideP1)[1],
                 'hisTurn': True
             },
             1: {
                 'side': sideP2,
                 'ready': False,
                 'moveCount': 0,
-                'cards': self.init_cards(sideP2),
+                'cards': self.init_cards(sideP2)[0],
+                'enemy_cards': self.init_cards(sideP2)[1],
                 'hisTurn': True
             }
         }
@@ -50,11 +52,17 @@ class Game:
         self.regions[side] = regions
 
     def init_cards(self, side):
+        enemy_side = 0 if side == 1 else 1
         char_cards = []
+        enemy_cards = []
         for i, card in enumerate(cards[side]):
-            card = Card(side, i, card)
+            card = Card(side, i, card, True)
             char_cards.append(card)
-        return char_cards
+        for i, card in enumerate(cards[enemy_side]):
+            card = Card(enemy_side, i, card, False)
+            enemy_cards.append(card)
+
+        return [char_cards, enemy_cards]
 
     def next_turn(self, player):
         if self.turn == 0:
@@ -95,4 +103,5 @@ class Game:
             val = 0 if side == 1 else 1
             reg_enemy = next((r for r in self.regions[val] if r.name.lower() == reg.name), None )
             reg_enemy.population = reg.population
+            reg_enemy.chars = reg.chars
 
