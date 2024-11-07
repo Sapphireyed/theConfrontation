@@ -1,8 +1,8 @@
 def get_regions(side):
     def_h = 90
-    mordor_h = 140
+    mordor_h = 100
     shire_h = 120
-    m_h = 60
+    m_h = 70
     regions = {
         "shire": {
            'name': 'shire',

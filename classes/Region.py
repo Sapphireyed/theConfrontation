@@ -26,56 +26,57 @@ class Region:
 
     def calculate_position(self):
         def_h = 90
-        start_h = 140 if self.side == 0 else 120
+        start_h = 120 if self.side == 1  else 100
         m_h = 60
+        staring_y = 200
         if self.position == 1:
             self.x = 700 / 2 - self.width / 2
-            self.y = self.y = 200 + start_h + def_h * 4 + m_h
+            self.y = staring_y + start_h + def_h * 4 + m_h
         elif self.position == 2:
             self.x = 700 / 2 - self.width
-            self.y = self.y = 200 + start_h + def_h * 3 + m_h
+            self.y = staring_y + start_h + def_h * 3 + m_h
         elif self.position == 3:
             self.x = 700 / 2
-            self.y = self.y = 200 + start_h + def_h * 3 + m_h
+            self.y = staring_y + start_h + def_h * 3 + m_h
         elif self.position == 4:
             self.x = 700 / 2 - self.width * 1.5
-            self.y = self.y = 200 + start_h + def_h * 2 + m_h
+            self.y = staring_y + start_h + def_h * 2 + m_h
         elif self.position == 5:
             self.x = 700 / 2 - self.width / 2
-            self.y = self.y = 200 + start_h + def_h * 2 + m_h
+            self.y = staring_y + start_h + def_h * 2 + m_h
         elif self.position == 6:
             self.x = 700 / 2 + self.width / 2
-            self.y = self.y = 200 + start_h + def_h * 2 + m_h
+            self.y = staring_y + start_h + def_h * 2 + m_h
         elif self.position == 7:
             self.x = 700 / 2 - self.width * 2
-            self.y = self.y = 200 + start_h + def_h * 2
+            self.y = staring_y + start_h + def_h * 2
         elif self.position == 8:
             self.x = 700 / 2 - self.width
-            self.y = self.y = 200 + start_h + def_h * 2
+            self.y = staring_y + start_h + def_h * 2
         elif self.position == 9:
             self.x = 700 / 2
-            self.y = self.y = 200 + start_h + def_h * 2
+            self.y = staring_y + start_h + def_h * 2
         elif self.position == 10:
             self.x = 700 / 2 + self.width
-            self.y = self.y = 200 + start_h + def_h * 2
+            self.y = staring_y + start_h + def_h * 2
         elif self.position == 16:
             self.x = 700 / 2 - self.width / 2
-            self.y = 200
+            self.y = staring_y
         elif self.position == 15:
             self.x = 700 / 2 - self.width
-            self.y = 200 + start_h
+            self.y = staring_y + start_h
         elif self.position == 14:
             self.x = 700 / 2
-            self.y = 200 + start_h
+            self.y = staring_y + start_h
         elif self.position == 13:
             self.x = 700 / 2 - self.width * 1.5
-            self.y = self.y = 200 + start_h + def_h
+            self.y = staring_y + start_h + def_h
         elif self.position == 12:
             self.x = 700 / 2 - self.width / 2
-            self.y = self.y = 200 + start_h + def_h
+            self.y = staring_y + start_h + def_h
         elif self.position == 11:
             self.x = 700 / 2 + self.width / 2
-            self.y = self.y = 200 + start_h + def_h
+            self.y = staring_y + start_h + def_h
         else:
             self.x = 0
             self.y = 0

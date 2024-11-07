@@ -154,7 +154,6 @@ def highlightAvailableRegions(char, side, game, n):
         ))
     else:
         reg_in = getRegIn(game, side, char)
-        print(reg_in.name)
         available_regions = list(filter(lambda reg: reg.name in reg_in.top_to, game.regions[side]))
 
     for reg in available_regions:
