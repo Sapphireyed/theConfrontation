@@ -81,9 +81,9 @@ def handleCharClick(game, side, pos, n, player):
 
         if char.clicked(pos):
             char.selected = True
+            highlightAvailableRegions(char, side, game, n)
         n.send({'msg': 'char_update', 'char': char, 'clicked': True})
 
-        highlightAvailableRegions(char, side, game, n)
 
 def handleRegClick(char_selected, pos, side_regs, n, side, game, player):
     for r in side_regs:
@@ -146,16 +146,21 @@ def handleCardClick(pos, n, game, player):
             card.selected = True
 
 def highlightAvailableRegions(char, side, game, n):
+    available_regions = []
     if not ifChecks.both_ready(game):
-        available_regions = filter(
+        available_regions = list(filter(
             lambda reg: reg.name in char.starts and reg.population < reg.limit and char.selected,
             game.regions[side]
-        )
+        ))
+    else:
+        reg_in = getRegIn(game, side, char)
+        print(reg_in.name)
+        available_regions = list(filter(lambda reg: reg.name in reg_in.top_to, game.regions[side]))
 
-        for reg in available_regions:
-            reg.color = (100, 255, 100)
-            reg.available = True
-            n.send({'msg': 'reg_update', 'reg': reg, 'side': side})
+    for reg in available_regions:
+        reg.color = (100, 255, 100)
+        reg.available = True
+        n.send({'msg': 'reg_update', 'reg': reg, 'side': side})
 
 def move_chas(char_selected, r, player, n):
     char_selected[1].region = r.name

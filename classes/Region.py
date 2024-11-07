@@ -84,7 +84,6 @@ class Region:
     def clicked(self, pos):
         mouseX = pos[0]
         mouseY = pos[1]
-        print('ttt')
 
         if self.x <= mouseX <= (self.x + self.width) and self.y <= mouseY <= (self.y + self.height):
             self.selected = True
