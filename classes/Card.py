@@ -14,49 +14,19 @@ class Card():
         self.discarded = False
 
     def calculateX(self, pos):
-        x = 0
-        if pos == 0:
+        x = 20
+        if pos % 3 == 0:
             x = 20
-        elif pos == 1:
+        elif pos % 3 == 1:
             x = 140
-        elif pos == 2:
+        else:
             x = 260
-        elif pos == 3:
-            x = 20
-        elif pos == 4:
-            x = 140
-        elif pos == 5:
-            x = 260
-        elif pos == 6:
-            x = 20
-        elif pos == 7:
-            x = 140
-        elif pos == 8:
-            x = 260
+
         return x
 
     def calculateY(self, pos):
-        y = 0
-        if pos == 0:
-            y = 200
-        elif pos == 1:
-            y = 240
-        elif pos == 2:
-            y = 280
-        elif pos == 3:
-            y = 320
-        elif pos == 4:
-            y = 360
-        elif pos == 5:
-            y = 400
-        elif pos == 6:
-            y = 440
-        elif pos == 7:
-            y = 480
-        elif pos == 8:
-            y = 520
-
-        return y
+        y = 500
+        return y if pos == 0 else (y + 40 * pos)
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))

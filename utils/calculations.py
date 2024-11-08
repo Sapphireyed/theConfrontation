@@ -6,16 +6,16 @@ def get_char_coordinates_init(win, reg_in, char, side):
     elif reg_in.limit == 4:
         x, y = 0, 0
         if char.name.lower() == reg_in.chars[0].name.lower():
-            x = reg_in.x + 10
+            x = reg_in.x
             y = reg_in.y + 10
-        elif char.name.lower() == reg_in.chars[1].name.lower():
-            x = reg_in.x + 10
+        elif len(reg_in.chars) > 1 and char.name.lower() == reg_in.chars[1].name.lower():
+            x = reg_in.x
             y = reg_in.y + 50
-        elif char.name.lower() == reg_in.chars[2].name.lower():
-            x = reg_in.x + reg_in.width / 2
+        elif len(reg_in.chars) > 2 and char.name.lower() == reg_in.chars[2].name.lower():
+            x = reg_in.x + reg_in.width / 2 + 3
             y = reg_in.y + 10
-        elif char.name.lower() == reg_in.chars[3].name.lower():
-            x = reg_in.x + reg_in.width / 2
+        elif len(reg_in.chars) > 3 and char.name.lower() == reg_in.chars[3].name.lower():
+            x = reg_in.x + reg_in.width / 2 + 3
             y = reg_in.y + 50
     else:
         x = reg_in.x + reg_in.width / 2 - char.width / 2

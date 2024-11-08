@@ -39,6 +39,21 @@ def initialize_regions(side, n):
 
     n.send({'msg': 'init_regions', 'regions': regions, 'side': side})
 
+    regions_data1 = get_regions(0 if side == 1 else 1)
+
+    regions1 = [Region(
+        region_info['name'],
+        '',
+        region_info['position'],
+        region_info['height'],
+        region_info['limit'],
+        region_info['top_to'],
+        region_info['next_to'],
+        region_info['bottom_to'],
+        side) for region_name, region_info in regions_data1.items()]
+
+    n.send({'msg': 'init_regions', 'regions': regions1, 'side': 0 if side == 1 else 1})
+
 def createOverlay(width, height):
     overlay_surface = pygame.Surface((width, height))
     overlay_color = (50, 50, 50)
@@ -66,7 +81,7 @@ def getRegIn(game, side, char):
     return reg_in
 
 def coverInactivePlayer(win, game, side, overlay):
-    if not ifChecks.is_active_player(game, side):
+    if game.turn > 0 and not ifChecks.is_active_player(game, side) and not game.fight:
         win.blit(overlay, (0, 0))
 
 def handleCharClick(game, side, pos, n, player):
@@ -107,16 +122,16 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game, player):
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
                         char_selected[1].y = r.y + 50
                     elif len(r.chars) == 0 and r.limit == 4:
-                        char_selected[1].x = r.x + 10
+                        char_selected[1].x = r.x
                         char_selected[1].y = r.y + 10
                     elif len(r.chars) == 1 and r.limit == 4:
-                        char_selected[1].x = r.x + 10
+                        char_selected[1].x = r.x
                         char_selected[1].y = r.y + 50
                     elif len(r.chars) == 2 and r.limit == 4:
-                        char_selected[1].x = r.x + r.width/2
+                        char_selected[1].x = r.x + r.width/2 + 2
                         char_selected[1].y = r.y + 10
                     elif len(r.chars) == 3 and r.limit == 4:
-                        char_selected[1].x = r.x + r.width/2
+                        char_selected[1].x = r.x + r.width/2 + 2
                         char_selected[1].y = r.y + 50
                     else:
                         char_selected[1].x = r.x + r.width / 2 - char_selected[1].width / 2
@@ -127,17 +142,21 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game, player):
                         prev_reg.chars = [f for f in prev_reg.chars if f.name.lower() != char_selected[1].name.lower()]
                         n.send({'msg': 'reg_update', 'reg': prev_reg, 'side': side})
 
-                    move_chas(char_selected, r, player, n)
+                    move_char(char_selected, r, player, n)
                     random.shuffle(r.chars)
-                    if game.turn > 0 and (ifChecks.is_active_player(game, side)):
+                    if game.turn > 0 and ifChecks.is_active_player(game, side) and not game.fight:
                         n.send(f'next_turn,{player}')
                 elif len(r.chars) > 0 and r.chars[0].side != char_selected[1].side and ifChecks.isLegalMove(prev_reg, r, game, player):
-                    print('FIGHT')
-                    move_chas(char_selected, r, player, n)
+                    n.send({'msg': 'fight', 'finished': False})
+                    move_char(char_selected, r, player, n)
                 else:
                     r.color = (200, 100, 100)
 
         n.send({'msg': 'reg_update', 'reg': r, 'side': side})
+        shire_obj = next((obj for obj in game.regions[0] if obj.name == 'shire'), None)
+        shire_obj1 = next((obj for obj in game.regions[1] if obj.name == 'shire'), None)
+        print('p1',shire_obj.chars)
+        print('p2', shire_obj1.chars)
 
 def handleCardClick(pos, n, game, player):
     for card in game.players[player]['cards']:
@@ -161,7 +180,7 @@ def highlightAvailableRegions(char, side, game, n):
         reg.available = True
         n.send({'msg': 'reg_update', 'reg': reg, 'side': side})
 
-def move_chas(char_selected, r, player, n):
+def move_char(char_selected, r, player, n):
     char_selected[1].region = r.name
     n.send({'msg': 'char_update', 'char': char_selected[1]})
     n.send({'msg': 'moves_update', 'player': player})

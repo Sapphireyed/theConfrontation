@@ -11,7 +11,7 @@ class Board:
         self.color = (128, 128, 128)
 
     def draw(self, win, side):
-        #pygame.draw.rect(win, self.color, (0, 0, self.width, self.height))
+        # pygame.draw.rect(win, self.color, (0, 0, self.width, self.height))
         self.drawBg(win, side)
         self.drawOverlay(win)
         self.drawMainBoard(win, side)
@@ -27,7 +27,6 @@ class Board:
         bg = pygame.transform.scale(bg, (bg.get_width() * 0.9, bg.get_height() * 0.9))
         cords = (-200, 0) if side == 0 else (-530, 0)
         win.blit(bg, cords)
-        # win.blit(bg, (-590, -130))
 
     def drawMainBoard(self, win, side):
         image = pygame.image.load('assets/board-no-bg.png')

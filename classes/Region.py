@@ -26,9 +26,9 @@ class Region:
 
     def calculate_position(self):
         def_h = 90
-        start_h = 120 if self.side == 1  else 100
-        m_h = 60
-        staring_y = 200
+        start_h = 120 if self.side == 1  else 70
+        m_h = 70
+        staring_y = 200 if self.side == 0 else 180
         if self.position == 1:
             self.x = 700 / 2 - self.width / 2
             self.y = staring_y + start_h + def_h * 4 + m_h
@@ -105,12 +105,12 @@ class Region:
         # border_color = (0, 0, 0)  # Replace with another color if needed
         # pygame.draw.rect(win, border_color, (self.x, self.y, self.width, self.height), 1)
 
-        # font = pygame.font.SysFont("cosmicsans", 20)
-        # text = font.render(self.name, True, (0, 0, 0))  # Text is opaque (fully visible)
-        # win.blit(text, (
-        #     self.x + round(self.width / 2) - round(text.get_width() / 2),
-        #     self.y + round(self.height / 2) - round(text.get_height() / 2)
-        # ))
+        font = pygame.font.SysFont("cosmicsans", 20)
+        text = font.render(self.name, True, (0, 0, 0))  # Text is opaque (fully visible)
+        win.blit(text, (
+            self.x + round(self.width / 2) - round(text.get_width() / 2),
+            self.y + round(self.height / 2) - round(text.get_height() / 2)
+        ))
 
     def update_regions(self, player):
         pass
