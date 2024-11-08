@@ -6,6 +6,7 @@ import utils.utils as utils
 from utils.setupTurn import setupTurn
 import utils.ifChecks as ifChecks
 import utils.calculations as calc
+from utils.fight import draw_fight
 
 pygame.init()
 
@@ -32,6 +33,8 @@ def redrawWindow(win, game, n, side, start, player):
         else:
             utils.coverInactivePlayer(win, game, side, overlay)
             utils.drawCards(win, game, player)
+            if game.fight:
+                draw_fight(win, width, height)
 
             for f, char in game.chars.items():
                 reg_in = utils.getRegIn(game, side, char)
@@ -39,6 +42,8 @@ def redrawWindow(win, game, n, side, start, player):
                 if reg_in and len(reg_in.chars) > 0:
                     x, y = calc.get_char_coordinates_init(win, reg_in, char, side)
                     char.draw(win, (x, y), side)
+
+        utils.coverInactivePlayer(win, game, side, overlay)
 
     pygame.display.update()
 

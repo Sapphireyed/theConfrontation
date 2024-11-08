@@ -49,7 +49,7 @@ chars = {
             'side': 1
         },
         {
-            'name': 'Black Rider',
+            'name': 'Rider',
             'skill': '',
             'strength': 3,
             'side': 1

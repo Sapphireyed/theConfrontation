@@ -65,6 +65,8 @@ def threaded_client(conn, p, gameId):
                         elif data['msg'] == 'reg_update':
                             reg = data['reg']
                             game.update_regions(reg, data['side'])
+                        elif data['msg'] == 'fight':
+                            game.handle_fight(data['finished'])
                         conn.sendall(pickle.dumps(game))
 
                 except pickle.UnpicklingError:

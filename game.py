@@ -1,7 +1,5 @@
 import random
-
 from pygame.examples.grid import Player
-
 from utils.charsData import chars
 from classes.Figurine import Figurine
 from classes.Card import Card
@@ -16,6 +14,7 @@ class Game:
         self.id = id
         self.ready = False
         self.turn = 0
+        self.fight = False
         self.regions = {
             0: [],
             1: []
@@ -27,7 +26,8 @@ class Game:
                 'moveCount': 0,
                 'cards': self.init_cards(sideP1)[0],
                 'enemy_cards':  self.init_cards(sideP1)[1],
-                'hisTurn': True
+                'hisTurn': True,
+                'graveyard': []
             },
             1: {
                 'side': sideP2,
@@ -35,7 +35,8 @@ class Game:
                 'moveCount': 0,
                 'cards': self.init_cards(sideP2)[0],
                 'enemy_cards': self.init_cards(sideP2)[1],
-                'hisTurn': True
+                'hisTurn': True,
+                'graveyard': []
             }
         }
         self.evilP = self.players[0] if sideP1 == 1 else self.players[1]
@@ -50,6 +51,7 @@ class Game:
 
     def init_regions(self, regions, side):
         self.regions[side] = regions
+
 
     def init_cards(self, side):
         enemy_side = 0 if side == 1 else 1
@@ -91,8 +93,9 @@ class Game:
         if self.turn > 0:
             self.players[player]['moveCount'] = 1
 
-    def update_player(self):
-        pass
+    def handle_fight(self, finished):
+        if not finished:
+            self.fight = True
 
     def update_regions(self, reg, side):
         for i, r in enumerate(self.regions[side]):
