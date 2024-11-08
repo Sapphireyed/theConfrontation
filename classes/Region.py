@@ -25,7 +25,7 @@ class Region:
         self.bottom_to = bottom_to
 
     def calculate_position(self):
-        def_h = 90
+        def_h = 90 if self.side == 0 else 95
         start_h = 120 if self.side == 1  else 70
         m_h = 70
         staring_y = 200 if self.side == 0 else 180
