@@ -1,8 +1,8 @@
 import pygame
 import random
-import utils.ifChecks as ifChecks
 from classes.Region import Region
 from utils.regionsData import get_regions
+import utils.ifChecks as ifChecks
 
 # def turn_text(win, text):
 #     font = pygame.font.SysFont("comicsans", 40)
@@ -153,10 +153,6 @@ def handleRegClick(char_selected, pos, side_regs, n, side, game, player):
                     r.color = (200, 100, 100)
 
         n.send({'msg': 'reg_update', 'reg': r, 'side': side})
-        shire_obj = next((obj for obj in game.regions[0] if obj.name == 'shire'), None)
-        shire_obj1 = next((obj for obj in game.regions[1] if obj.name == 'shire'), None)
-        print('p1',shire_obj.chars)
-        print('p2', shire_obj1.chars)
 
 def handleCardClick(pos, n, game, player):
     for card in game.players[player]['cards']:
