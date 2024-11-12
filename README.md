@@ -10,11 +10,11 @@ Current status:
 2. Sides assigned to players randomly (to implement possibility to choose sides)
 3. Board built accordingly for each player depending on which side a player plays
 4. Setup turn works properly (each player makes initial setup of their characters in legal regions)
-# actually limits on starting positions are off, there can be only one character on starting region with exception for Shire(4) and Mordor(4). Needs fixing #
+***actually limits on starting positions are off, there can be only one character on starting region with exception for Shire(4) and Mordor(4). Needs fixing***
 5. Start game done (after both players finish setup all the characters are distributed on the board, opponent's character having hidden names, though)
 6. Limits work after game start
 7. Moving characters and shuffling characters on given region works
-# the x and y coordinates don't update properly after shuffling. Needs fixing #
+***the x and y coordinates don't update properly after shuffling. Needs fixing***
 8. Fight recognized properly. Fight mechanic not implemented
 9. Cards initialized and shown on the board, logic not implemented yet.
 
